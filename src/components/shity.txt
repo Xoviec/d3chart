@@ -1,0 +1,44 @@
+102  
+// .domain([0, data.length-1])
+
+   103    // .domain(extent(chartData, d => d.x)) //oś x od najmniejszego do najwiekszego x-a
+
+
+svg.append('g).call(linegenerator)
+                       // .attr("class","line")
+            // .attr('fill', 'rgba(33, 146, 219, 0.4)')
+                // .attr('transform', `translate(0, ${h})`)
+
+
+        // const generateScaledLine = d3.line()
+        //     .x((d,i)=> xScale(i))
+        //     .y(yScale)
+
+svg.selectall('.line')
+ // .attr('d', d =>
+                // // console.log(d.y) zmienic na data a potem korzystac z array data (.d)
+                // // generateScaledLine(d.y)
+                // generateScaledLine([20, 40, 80,50,50,20])
+                // )
+
+
+                    // if(proba===1){
+                    //     d3.select(this)
+                    //         .attr("r", 10)
+                    //         .style("fill", "red");
+                    //     setProba(0)
+                    // }
+                    // if(proba===0){
+                    //     d3.select(this)
+                    //         .attr("r", 10)
+                    //         .style("fill", "black")
+                    //     setProba(1)
+
+                    // }
+                    // console.log(d.id)
+                    // console.log('dziala')
+                    // svg.selectAll("circle-germany")
+                    //     console.log(i)
+                        // .attr("class", "circle-spermuszka")
+
+                    // d3.select(this).attr("fill", "url(#myPattern)")

@@ -43,6 +43,7 @@ export const Chart = ()=>{
             .style('box-shadow', '1px 1px 0px 0px rgba(0, 0, 0, 1)')
             .style('transition', '0.5s')
 
+        
 
         svg.selectAll(".circle-point")
             .data(chartData)
@@ -61,18 +62,15 @@ export const Chart = ()=>{
                         d3.select(this).attr("r", '4')                    
                     })
                     .on("click", function(i , d) {
-                        console.log(i)
-                        console.log(d)
                         if(idArr.includes(d)){
                             deleteArr(d)
-                            d3.select(this).style("fill", 'purple')
+                            // d3.select(this).style("fill", 'purple')
                         }
                         else{
                             const newArr = [...idArr, d]
                             setIdArr(newArr)
-                            d3.select(this).style("fill", 'yellow')
+                            // d3.select(this).style("fill", 'yellow')
                         }
-                        console.log('idArr: ', idArr)
                     })
 
         const xAxis = d3.axisBottom(xScale)
@@ -99,6 +97,7 @@ export const Chart = ()=>{
         const newArr = idArr.filter((arr)=> arr !== id)
         console.log(newArr)
         setIdArr(newArr);
+
       }
 
     const lineGenerator = d3.line() 
@@ -109,9 +108,9 @@ export const Chart = ()=>{
     const yValue = d => d.y;
   
     const xScale = d3.scaleLinear()        
-          .domain([0, 160])
-          .domain([0, (max(chartData, d=>d.x))+10])
-          .range([0, w])                   
+        .domain([0, 160])
+        .domain([0, (max(chartData, d=>d.x))+10])
+        .range([0, w])                   
     const yScale = d3.scaleLinear()
         .domain([0, (max(chartData, d=>d.y)*2)])
         .range([h, max(chartData, d=>d.y)])
@@ -120,9 +119,17 @@ export const Chart = ()=>{
         <div>
             <div className='container'>
                 <div className='chart'>
+
+                    {
+                    chartData ? 
                     <svg ref={svgRef}>
                         <path className='chart-line' d={lineGenerator(chartData)} />
                     </svg>
+                    :
+                    <p>Loading...</p>
+                    }
+
+
                     <button onClick={changeColor}>
                         CHANGE COLOR                    
                     </button>

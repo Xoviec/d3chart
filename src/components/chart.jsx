@@ -2,112 +2,91 @@ import chartData from '../JSON/data.json'
 import React, {useState, useRef, useEffect} from 'react'
 import * as d3 from 'd3';
 import '../App.css' 
-import { extent, max, scaleLinear, line } from 'd3';
+import { extent, max, scaleLinear, line, svg } from 'd3';
 
 export const Chart = ()=>{
 
     const [proba, setProba] = useState(0)
     const [idArr, setIdArr] = useState([])
+    const [colorList] = useState(['red','green','blue','grey'])
+    const [colorIndex, setColorIndex] =  useState(0)
+    const [visibility, setVisibility] = useState(0)
+
+
+    const changeColor = () =>{
+        setColorIndex( i=> i+1)
+        console.log(colorIndex)
+        if(colorIndex==colorList.length-1){
+            setColorIndex(0)
+        }
+    }
 
 
     
     // const [lineGenerator, setLineGenerator] = useState()
     // const [data] = useState([25,50,35,15,94,50])
-    const [chartData] = useState(
-        [
-  {
-    "id": 1,
-    "x": 10,
-    "y": 0.5,
-    "target": 1,
-    "prediction": 0,
-    "diagnosisGroupId": 1
-  },
-  {
-    "id": 2,
-    "x": 30,
-    "y": 0.52,
-    "target": 0,
-    "prediction": 0,
-    "diagnosisGroupId": 5
-  }, {
-  "id": 3,
-  "x": 50,
-  "y": 0.53,
-  "target": 1,
-  "prediction": 0,
-  "diagnosisGroupId": 5
-}, {
-  "id": 4,
-  "x": 70,
-  "y": 0.6,
-  "target": 1,
-  "prediction": 0,
-  "diagnosisGroupId": 5
-},
-  {
-    "id": 5,
-    "x": 90,
-    "y": 0.7,
-    "target": 0,
-    "prediction": 0,
-    "diagnosisGroupId": 1
-  }, {
-  "id": 6,
-  "x": 110,
-  "y": 0.65,
-  "target": 1,
-  "prediction": 0,
-  "diagnosisGroupId": 5
-}, {
-  "id": 7,
-  "x": 130,
-  "y": 0.75,
-  "target": 1,
-  "prediction": 0,
-  "diagnosisGroupId": 5
-}, {
-  "id": 8,
-  "x": 150,
-  "y": 1.2,
-  "target": 1,
-  "prediction": 0,
-  "diagnosisGroupId": 5
-}]
-
-        // [
-        //     {
-        //         id: 1,
-        //         x: 1,
-        //         y: 2
-        //     },
-        //     {
-        //         id: 2,
-        //         x: 2,
-        //         y: 4
-        //     },
-        //     {
-        //         id: 3,
-        //         x: 3,
-        //         y: 8
-        //     },
-        //     {
-        //         id: 4,
-        //         x: 4,
-        //         y: 5
-        //     },
-        //     {
-        //         id: 5,
-        //         x: 5,
-        //         y: 5
-        //     },
-        //     {
-        //         id: 6,
-        //         x: 6,
-        //         y: 2
-        //     },
-        // ]
-    )
+    // const [chartData] = useState(chartData)
+//         [
+//   {
+//     "id": 1,
+//     "x": 10,
+//     "y": 0.5,
+//     "target": 1,
+//     "prediction": 0,
+//     "diagnosisGroupId": 1
+//   },
+//   {
+//     "id": 2,
+//     "x": 30,
+//     "y": 0.52,
+//     "target": 0,
+//     "prediction": 0,
+//     "diagnosisGroupId": 5
+//   }, {
+//   "id": 3,
+//   "x": 50,
+//   "y": 0.53,
+//   "target": 1,
+//   "prediction": 0,
+//   "diagnosisGroupId": 5
+// }, {
+//   "id": 4,
+//   "x": 70,
+//   "y": 0.6,
+//   "target": 1,
+//   "prediction": 0,
+//   "diagnosisGroupId": 5
+// },
+//   {
+//     "id": 5,
+//     "x": 90,
+//     "y": 0.7,
+//     "target": 0,
+//     "prediction": 0,
+//     "diagnosisGroupId": 1
+//   }, {
+//   "id": 6,
+//   "x": 110,
+//   "y": 0.65,
+//   "target": 1,
+//   "prediction": 0,
+//   "diagnosisGroupId": 5
+// }, {
+//   "id": 7,
+//   "x": 130,
+//   "y": 0.75,
+//   "target": 1,
+//   "prediction": 0,
+//   "diagnosisGroupId": 5
+// },
+//  {
+//   "id": 8,
+//   "x": 150,
+//   "y": 1.2,
+//   "target": 1,
+//   "prediction": 0,
+//   "diagnosisGroupId": 5
+// }]
 
     let data = [];
     let yData = [];
@@ -141,16 +120,19 @@ export const Chart = ()=>{
 
     useEffect(()=>{
 
-        const margin =  {top: 10, right: 30, bottom: 30, left: 50};
+        const margin =  {top: 0, right: 0, bottom: 0, left: 0};
         // const w = 400;
         // const h = 100;
         const svg = d3.select(svgRef.current)
             .attr('width', w)
             .attr('height', h)
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-            .style('background', '#d3d3d3')
+            .style('background', `${colorList[colorIndex]}`)
             .style('margin-top', '50')
             .style('overflow', 'visible')
+            .style('box-shadow', '1px 1px 0px 0px rgba(0, 0, 0, 1)')
+            .style('transition', '0.5s')
+
 
         const xValue = d => d.x;
         const yValue = d => d.y;
@@ -183,16 +165,8 @@ export const Chart = ()=>{
         //         .attr('fill', 'rgba(33, 146, 219, 0.4)')
 
         //     .attr("id","chart-background")
- 
-        const Tooltip = d3.select("#div_template")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "2px")
-            .style("border-radius", "5px")
-            .style("padding", "5px")
+
+            
 
 
             // const lineGenerator = d3.line() 
@@ -202,32 +176,53 @@ export const Chart = ()=>{
 
         
 
-        svg.selectAll('.line')  //poprzedni generator lini
-            .data(chartData)
-            .join('path')
+        // svg.selectAll('.line')  //poprzedni generator lini
+        //     .data(chartData)
+        //     .join('path')
+
                
-                .attr('fill', 'none')
-                .attr('stroke', 'black')
+        //         .attr('fill', 'none')
+        //         .attr('stroke', 'black')
 
 
+            
+            
 
+             
     
-        svg.selectAll(".circle-germany")
+        svg.selectAll(".circle-point")
             .data(chartData)
             .join("circle") // enter append
                 .attr("id", d=>d.id)
-                  .attr("class", "circle-germany")
-                  .attr("fill", "black")
+                  .attr("class", "circle-point")
+                  .attr("fill", "purple")
+                  .attr("z-index", "20")
                   .attr("z-index", "99999999")
                   .attr("r", "4") // radius
                   .attr("cx", d=> xScale(d.x))   // center x passing through your xScale
                   .attr("cy", d=> yScale(d.y))
                   .on('mouseover', function (i, d) {
+   
+
+                        hovering.transition()
+                            .style("opacity", 1);
+
+
+
                     console.log('y: ', d.y)
                     console.log('x: ', d.x)
+                    console.log(i)
+
+                    
+                })
+                .on('mouseleave', function (i, d) {
+                    console.log('bajbvaj')
+                    hovering.transition()
+                    .style("opacity", 0);
                     
                 })
                 .on("click", function(i , d) {
+
                     console.log(i)
                     console.log(d)
                     if(idArr.includes(d)){
@@ -241,24 +236,47 @@ export const Chart = ()=>{
 
 
                 })
-          
 
         const xAxis = d3.axisBottom(xScale)
             .ticks(data.length)
             .tickFormat( i => i )
+
+        const hoverXAxis = d3.axisBottom(xScale)
+            .ticks(5)
+            .tickFormat( i => ' ')
+
         
         const yAxis = d3.axisLeft(yScale)
-            .ticks(5)
+            // .ticks(8)
             .tickSizeInner(-w)
+
+
+        const hoverYAxis = d3.axisLeft(yScale)
+        .ticks(0)
+        .tickSizeInner(-w)
+        .tickFormat( i => 'bndssdna ')
+
+        const hovering = svg.append('g' )
+            .data([chartData])
+
+
+            .call((hoverXAxis).ticks(1).tickSizeInner(-(h-yScale(data.y)))) 
+            .attr('transform', `translate(${xScale(data.x)}, ${h})`)
+            .attr('visibility', 'visible')
+            
             
 
         svg.append('g')
             .call((xAxis).ticks(data.length).tickSizeInner(-h)) 
             .attr('transform', `translate(0, ${h})`)
-            
+            .attr("z-index", '1')
+            .attr("class", "xAxis")
+
 
         svg.append('g')
             .call(yAxis)     
+            .attr("z-index", '1')
+
             // .attr('transform', `translate(0, ${h})`)
 
                     
@@ -313,7 +331,7 @@ export const Chart = ()=>{
         //     .on("mouseout", function(d) {
         //         tip.style("opacity", 0)
         //     })
-
+                
 
     }, [data])
 
@@ -331,8 +349,8 @@ export const Chart = ()=>{
       }
 
 
-      const w = 400;
-      const h = 100;
+      const w = 500;
+      const h = 200;
 
 
       const lineGenerator = d3.line() 
@@ -346,12 +364,14 @@ export const Chart = ()=>{
           
   
       const xScale = d3.scaleLinear()
-          .domain([0, max(chartData, d=>d.x)])
-          .range([0, w])
-
+        //   .domain([0, max(chartData, d=>d.x)])
+        
+          .domain([0, 160])
+          .domain([0, (max(chartData, d=>d.x))+10])
+          .range([0, w])                     //range do roboty
 
           const yScale = d3.scaleLinear()
-          .domain([0, max(chartData, d=>d.y)])
+          .domain([0, (max(chartData, d=>d.y)*2)])
           .range([h, max(chartData, d=>d.y)])
 
     //   const yScale = d3.scaleLinear()
@@ -360,29 +380,47 @@ export const Chart = ()=>{
 
 
     return(
-        <div className='container'>
-            <svg ref={svgRef}>
-                
-                <path d={lineGenerator(chartData)}/>
-             
-              
-                {/* <path d={generateScaledLine(chartData)}/> */}
+        <div>
+            <div className='container'>
+                <div className='chart'>
+                    <svg ref={svgRef}>
+                        
+                        <path className='chart-line' d={lineGenerator(chartData)} />
 
-            </svg>
-            <div>
-            {
-                idArr.map((el)=>
-                <button className='tooltip' value={el} onClick={()=>deleteArr(el)}>
-                        <p>{el.id}</p>
-                        <p>{`X: ${el.x}`}</p>
-                        <p>{`Y: ${el.y}`}</p>
-  
-                </button>
-                )
-            }
-            
+                
+                    </svg>
+                    <button onClick={changeColor}>
+                        CHANGE COLOR                    
+                    </button>
+                </div>
+ 
+                <div className='tooltip'>
+                {
+                    idArr.map((el)=>
+                    <div className='el-info' value={el} onClick={()=>deleteArr(el)}>
+                        <div className='items-left'>
+                            <p>X:</p>
+                            <p>Y:</p>
+                            <p>Target:</p>
+                            <p>Prediction:</p>
+                            <p>Group ID:</p>
+                        </div>
+                        <div className='items-right'>
+                            <p>{el.x}</p>
+                            <p>{el.y}</p>
+                            <p>{el.target}</p>
+                            <p>{el.prediction}</p>
+                            <p>{el.diagnosisGroupId}</p>
+                        </div>
+
+    
+                    </div>
+                    )
+                }
+                
+                </div>
+
             </div>
-            <button onClick={dataCheck}>elo</button>
 
         </div>
     )
